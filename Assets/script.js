@@ -1,21 +1,50 @@
-var currentDay = moment().format("dddd, MMMM Do YYY, h:mm:ss a");
+var hour9 = $("#9");
+var hour10 = $("#10");
+var hour11 = $("#11");
+var hour12 = $("#12");
+var hour1 = $("#13");
+var hour2 = $("#14");
+var hour3 = $("#15");
+var hour4 = $("#16");
+var hour5 = $("#17");
+var hour = moment().hour();
+var textarea = $("#text");
 
-$("#currentDay").text(currentDay);
+function setPlanner() {
+  $("#currentDay").text(moment().format("dddd, MMMM Do YYYY"));
+  $(".time-block").each(function(){
+    var id = $(this).attr("id");
+  console.log(id)
+    var schedule = localStorage.getItem(id);
+    console.log(schedule)
+    if (schedule !== null) {
+       textarea.val(schedule);
+    }
+  });
+}
 
-#(document).ready(function () {
+setPlanner();
+var saveBtn = $(".saveBtn");
 
-    $("#hour-6 .description").val(localStorage.getItem("hour-6"));
-    $("#hour-7 .description").val(localStorage.getItem("hour-7"));
-    $("#hour-8 .description").val(localStorage.getItem("hour-8"));
-    $("#hour-9 .description").val(localStorage.getItem("hour-9"));
-    $("#hour-10 .description").val(localStorage.getItem("hour-10"));
-    $("#hour-11 .description").val(localStorage.getItem("hour-11"));
-    $("#hour-12 .description").val(localStorage.getItem("hour-12"));
-    $("#hour-13 .description").val(localStorage.getItem("hour-13"));
-    $("#hour-14 .description").val(localStorage.getItem("hour-14"));
-    $("#hour-15 .description").val(localStorage.getItem("hour-15"));
-    $("#hour-16 .description").val(localStorage.getItem("hour-16"));
-    $("#hour-17 .description").val(localStorage.getItem("hour-17"));
-    $("#hour-18 .description").val(localStorage.getItem("hour-18"));
+saveBtn.on("click", function() {
+  var time = $(this).parent().attr("id");
+  var schedule = $(this).siblings(".schedule").val();
+  localStorage.setItem(time, schedule);
+});
 
-})
+function pastPresentFuture() {
+  $(".time-block").each(function () {
+    var thisHour = parseInt($(this).attr("id"));
+ 
+    if (thisHour > hour) {
+      $(this).addClass("future");
+    } 
+    else if (thisHour === hour) {
+     $(this).addClass("present");
+    }
+    else {
+      $(this).addClass("past");
+    }
+  })
+}
+pastPresentFuture();
